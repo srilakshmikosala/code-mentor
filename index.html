@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Code Mentor 🤖</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: white;
+    min-height: 100vh;
+    overflow-x: hidden;
+
+    background:
+        radial-gradient(circle at 10% 5%, rgba(139, 92, 246, 0.22), transparent 28%),
+        radial-gradient(circle at 90% 15%, rgba(34, 211, 238, 0.17), transparent 28%),
+        radial-gradient(circle at 50% 80%, rgba(99, 102, 241, 0.10), transparent 35%),
+        #030617;
+}
+
+/* subtle futuristic grid */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+
+    background-image:
+        linear-gradient(rgba(120, 140, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(120, 140, 255, 0.035) 1px, transparent 1px);
+
+    background-size: 42px 42px;
+
+    mask-image: linear-gradient(to bottom, black, transparent 90%);
+    z-index: -2;
+}
+
+/* floating glow */
+
+body::after {
+    content: "";
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+
+    background: rgba(84, 70, 229, 0.07);
+    filter: blur(100px);
+
+    top: 30%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: -3;
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.navbar {
+    height: 78px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 7%;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    background: rgba(3, 6, 23, 0.72);
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    border-bottom: 1px solid rgba(120, 130, 255, 0.18);
+
+    box-shadow:
+        0 10px 35px rgba(0, 0, 0, 0.20);
+}
+
+.logo {
+    font-size: 29px;
+    font-weight: 800;
+
+    background: linear-gradient(
+        90deg,
+        #b58cff,
+        #55e8ff
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    letter-spacing: 0.5px;
+}
+
+.badge {
+    padding: 10px 20px;
+
+    border: 1px solid rgba(84, 232, 255, 0.45);
+    border-radius: 30px;
+
+    color: #d9f7ff;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    background: rgba(60, 220, 255, 0.055);
+
+    box-shadow:
+        0 0 20px rgba(60, 220, 255, 0.06);
+
+    transition: 0.3s ease;
+}
+
+.badge:hover {
+    border-color: rgba(84, 232, 255, 0.75);
+
+    box-shadow:
+        0 0 25px rgba(84, 232, 255, 0.14);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero {
+    width: 100%;
+    max-width: 1536px;
+
+    margin: auto;
+
+    position: relative;
+    overflow: hidden;
+
+    border-bottom: 1px solid rgba(100, 120, 255, 0.15);
+}
+
+.hero-image {
+    width: 100%;
+    height: auto;
+
+    display: block;
+
+    transition:
+        transform 0.7s ease,
+        filter 0.7s ease;
+}
+
+.hero:hover .hero-image {
+    transform: scale(1.012);
+    filter: brightness(1.04);
+}
+
+.hero::after {
+    content: "";
+
+    position: absolute;
+
+    left: 12%;
+    right: 12%;
+    bottom: 0;
+
+    height: 2px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(80, 225, 255, 0.65),
+        rgba(170, 100, 255, 0.65),
+        transparent
+    );
+
+    box-shadow:
+        0 0 18px rgba(80, 225, 255, 0.25);
+}
+
+
+/* =========================================================
+   SECTION TITLE
+   ========================================================= */
+
+.editor-section {
+    width: 90%;
+    max-width: 1100px;
+
+    margin: 75px auto 60px;
+}
+
+.section-title {
+    text-align: center;
+
+    font-size: 35px;
+    font-weight: 800;
+
+    margin-bottom: 32px;
+
+    letter-spacing: -0.5px;
+}
+
+.section-title span,
+.learning h2 span {
+    background: linear-gradient(
+        90deg,
+        #b276ff,
+        #48e6ff
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+/* =========================================================
+   EDITOR BOX
+   ========================================================= */
+
+.editor-box {
+    position: relative;
+
+    padding: 27px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17, 27, 67, 0.94),
+            rgba(5, 11, 34, 0.96)
+        );
+
+    border: 1px solid rgba(111, 128, 255, 0.35);
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.28),
+        0 0 45px rgba(80, 90, 255, 0.08),
+        inset 0 0 35px rgba(100, 120, 255, 0.025);
+
+    overflow: hidden;
+
+    transition: 0.35s ease;
+}
+
+.editor-box::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 2px;
+
+    background: linear-gradient(
+        90deg,
+        #925eff,
+        #45e8ff
+    );
+
+    opacity: 0.8;
+}
+
+.editor-box:hover {
+    border-color: rgba(83, 222, 255, 0.45);
+
+    box-shadow:
+        0 28px 80px rgba(0, 0, 0, 0.32),
+        0 0 55px rgba(70, 150, 255, 0.12);
+}
+
+
+/* =========================================================
+   EDITOR HEADER
+   ========================================================= */
+
+.editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 17px;
+
+    color: #929fc9;
+
+    font-size: 14px;
+}
+
+.language {
+    color: #65e8ff;
+
+    font-weight: 700;
+
+    padding: 7px 12px;
+
+    border-radius: 8px;
+
+    background: rgba(70, 220, 255, 0.07);
+
+    border: 1px solid rgba(70, 220, 255, 0.12);
+}
+
+
+/* =========================================================
+   TEXTAREA
+   ========================================================= */
+
+textarea {
+    width: 100%;
+    min-height: 285px;
+
+    resize: vertical;
+
+    padding: 21px;
+
+    border-radius: 16px;
+
+    border: 1px solid #26396f;
+
+    outline: none;
+
+    color: #e9eeff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(2, 6, 20, 0.99),
+            rgba(7, 14, 37, 0.99)
+        );
+
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
+    font-size: 16px;
+    line-height: 1.7;
+
+    box-shadow:
+        inset 0 0 30px rgba(40, 80, 180, 0.035);
+
+    transition: 0.3s ease;
+}
+
+textarea::placeholder {
+    color: #59678f;
+}
+
+textarea:focus {
+    border-color: #4ce5ff;
+
+    box-shadow:
+        0 0 0 3px rgba(76, 229, 255, 0.055),
+        0 0 35px rgba(76, 229, 255, 0.12),
+        inset 0 0 25px rgba(70, 120, 255, 0.04);
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.buttons {
+    display: flex;
+    gap: 15px;
+
+    margin-top: 21px;
+}
+
+button {
+    border: none;
+
+    border-radius: 13px;
+
+    padding: 14px 28px;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+}
+
+.analyze-btn {
+    position: relative;
+
+    color: white;
+
+    background: linear-gradient(
+        100deg,
+        #8651ff,
+        #3cdfff
+    );
+
+    box-shadow:
+        0 10px 28px rgba(91, 86, 255, 0.24);
+}
+
+.analyze-btn:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 14px 35px rgba(91, 86, 255, 0.36),
+        0 0 25px rgba(60, 223, 255, 0.13);
+}
+
+.analyze-btn:active {
+    transform: translateY(0);
+}
+
+.clear-btn {
+    color: #dbe5ff;
+
+    background: rgba(23, 35, 75, 0.9);
+
+    border: 1px solid rgba(116, 137, 220, 0.28);
+}
+
+.clear-btn:hover {
+    transform: translateY(-3px);
+
+    background: rgba(31, 47, 96, 0.95);
+
+    border-color: rgba(100, 200, 255, 0.45);
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.20);
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading {
+    display: none;
+
+    width: fit-content;
+
+    margin: 25px auto;
+
+    padding: 12px 20px;
+
+    border-radius: 30px;
+
+    color: #68eaff;
+
+    background: rgba(60, 220, 255, 0.055);
+
+    border: 1px solid rgba(60, 220, 255, 0.16);
+
+    font-size: 14px;
+
+    animation: loadingPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes loadingPulse {
+    0%, 100% {
+        opacity: 0.45;
+        box-shadow: 0 0 5px rgba(60, 220, 255, 0);
+    }
+
+    50% {
+        opacity: 1;
+        box-shadow: 0 0 22px rgba(60, 220, 255, 0.12);
+    }
+}
+
+
+/* =========================================================
+   RESULTS
+   ========================================================= */
+
+.results {
+    width: 90%;
+    max-width: 1100px;
+
+    margin: 40px auto;
+
+    scroll-margin-top: 105px;
+}
+
+
+/* =========================================================
+   RESULT CARDS
+   ========================================================= */
+
+.result-card {
+    position: relative;
+
+    padding: 25px;
+
+    margin-bottom: 19px;
+
+    border-radius: 19px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(14, 24, 61, 0.97),
+            rgba(5, 11, 35, 0.98)
+        );
+
+    border: 1px solid rgba(105, 124, 255, 0.30);
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.20),
+        inset 0 0 25px rgba(90, 100, 255, 0.025);
+
+    opacity: 0;
+
+    transform:
+        translateY(35px)
+        scale(0.94);
+
+    animation:
+        resultPop 0.55s
+        cubic-bezier(.2,.8,.2,1)
+        forwards;
+
+    overflow: hidden;
+
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.result-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 2px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #52ddff,
+        #a66cff,
+        transparent
+    );
+
+    opacity: 0.55;
+}
+
+.result-card:hover {
+    border-color: rgba(74, 221, 255, 0.45);
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.25),
+        0 0 30px rgba(70, 150, 255, 0.09);
+}
+
+
+/* =========================================================
+   RESULT ANIMATION
+   ========================================================= */
+
+.result-card:nth-child(1) {
+    animation-delay: 0.10s;
+}
+
+.result-card:nth-child(2) {
+    animation-delay: 0.30s;
+}
+
+.result-card:nth-child(3) {
+    animation-delay: 0.50s;
+}
+
+.result-card:nth-child(4) {
+    animation-delay: 0.70s;
+}
+
+.result-card:nth-child(5) {
+    animation-delay: 0.90s;
+}
+
+.result-card:nth-child(6) {
+    animation-delay: 1.10s;
+}
+
+.result-card:nth-child(7) {
+    animation-delay: 1.30s;
+}
+
+@keyframes resultPop {
+
+    0% {
+        opacity: 0;
+
+        transform:
+            translateY(35px)
+            scale(0.94);
+    }
+
+    70% {
+        opacity: 1;
+
+        transform:
+            translateY(-4px)
+            scale(1.01);
+    }
+
+    100% {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* =========================================================
+   RESULT TEXT
+   ========================================================= */
+
+.result-card h3 {
+    color: #68e7ff;
+
+    font-size: 20px;
+
+    margin-bottom: 14px;
+
+    font-weight: 750;
+}
+
+.result-card pre {
+    white-space: pre-wrap;
+
+    color: #d8e1ff;
+
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
+    line-height: 1.7;
+
+    margin: 0;
+}
+
+
+/* =========================================================
+   OUTPUT CARD
+   ========================================================= */
+
+.output-card {
+    border-color: rgba(72, 226, 255, 0.48);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10, 34, 57, 0.98),
+            rgba(5, 17, 37, 0.98)
+        );
+
+    box-shadow:
+        0 15px 45px rgba(0, 0, 0, 0.22),
+        0 0 30px rgba(60, 220, 255, 0.07);
+}
+
+.output-card h3 {
+    color: #62edff;
+}
+
+.output-content {
+    min-height: 48px;
+
+    padding: 17px;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(2, 6, 20, 0.98),
+            rgba(5, 14, 32, 0.98)
+        );
+
+    border: 1px solid #284178;
+
+    color: #e7efff;
+
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
+    white-space: pre-wrap;
+
+    line-height: 1.65;
+
+    box-shadow:
+        inset 0 0 22px rgba(50, 120, 255, 0.035);
+}
+
+
+/* =========================================================
+   LEARNING JOURNEY
+   ========================================================= */
+
+.learning {
+    width: 90%;
+    max-width: 1100px;
+
+    margin: 100px auto 90px;
+
+    text-align: center;
+}
+
+.learning h2 {
+    font-size: 35px;
+
+    font-weight: 800;
+
+    margin-bottom: 38px;
+}
+
+.cards {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 22px;
+}
+
+.learning-card {
+    position: relative;
+
+    padding: 34px 26px;
+
+    min-height: 225px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    border-radius: 21px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(14, 24, 61, 0.95),
+            rgba(5, 11, 35, 0.97)
+        );
+
+    border: 1px solid rgba(105, 124, 255, 0.27);
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.18);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.35s ease,
+        border-color 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+.learning-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 120px;
+    height: 120px;
+
+    border-radius: 50%;
+
+    background: rgba(70, 200, 255, 0.07);
+
+    filter: blur(35px);
+
+    top: -50px;
+    right: -30px;
+}
+
+.learning-card:hover {
+    transform: translateY(-10px);
+
+    border-color: rgba(70, 220, 255, 0.48);
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.28),
+        0 0 28px rgba(70, 180, 255, 0.08);
+}
+
+.learning-card .icon {
+    font-size: 44px;
+
+    margin-bottom: 17px;
+
+    transition:
+        transform 0.35s ease;
+}
+
+.learning-card:hover .icon {
+    transform:
+        translateY(-4px)
+        scale(1.12);
+}
+
+.learning-card h3 {
+    color: #8beaff;
+
+    font-size: 21px;
+
+    margin-bottom: 11px;
+}
+
+.learning-card p {
+    color: #aebbdc;
+
+    line-height: 1.65;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+    padding: 35px 20px;
+
+    text-align: center;
+
+    color: #7f8db4;
+
+    border-top:
+        1px solid rgba(100, 120, 255, 0.16);
+
+    background:
+        rgba(2, 5, 19, 0.72);
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+    .navbar {
+        height: auto;
+
+        padding: 17px 20px;
+
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+    .logo {
+        font-size: 25px;
+    }
+
+    .badge {
+        font-size: 12px;
+
+        padding: 8px 15px;
+    }
+
+    .editor-section,
+    .results,
+    .learning {
+        width: 94%;
+    }
+
+    .editor-section {
+        margin-top: 48px;
+    }
+
+    .section-title,
+    .learning h2 {
+        font-size: 28px;
+    }
+
+    .editor-box {
+        padding: 18px;
+        border-radius: 19px;
+    }
+
+    textarea {
+        min-height: 245px;
+        font-size: 14px;
+        padding: 17px;
+    }
+
+    .editor-header {
+        font-size: 12px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .learning-card {
+        min-height: 200px;
+    }
+
+    .result-card {
+        padding: 20px;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    .result-card {
+        animation: none;
+
+        opacity: 1;
+
+        transform: none;
+    }
+
+    .loading {
+        animation: none;
+    }
+
+    * {
+        transition: none !important;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     NAVBAR
+     ========================================================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        ⚡ Code Mentor
+    </div>
+
+    <div class="badge">
+        Python&nbsp; • &nbsp;AI Learning Assistant
+    </div>
+
+</nav>
+
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+
+<section class="hero">
+
+    <img
+        src="{{ url_for('static', filename='robot.png') }}"
+        class="hero-image"
+        alt="Code Mentor AI Robot"
+    >
+
+</section>
+
+
+<!-- =========================================================
+     CODE EDITOR
+     ========================================================= -->
+
+<section class="editor-section">
+
+    <h2 class="section-title">
+        Try Your <span>Python Code</span>
+    </h2>
+
+
+    <div class="editor-box">
+
+        <div class="editor-header">
+
+            <span class="language">
+                🐍 Python 3
+            </span>
+
+            <span>
+                Code Editor
+            </span>
+
+        </div>
+
+
+        <textarea
+            id="codeInput"
+            placeholder="Write your Python code here...
+
+Example:
+
+x = 10
+y = 20
+print(x + y)"
+        ></textarea>
+
+
+        <div class="buttons">
+
+            <button
+                class="analyze-btn"
+                onclick="analyzeCode()">
+
+                🚀 Analyze Code
+
+            </button>
+
+
+            <button
+                class="clear-btn"
+                onclick="clearCode()">
+
+                🗑 Clear
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     LOADING
+     ========================================================= -->
+
+<div
+    class="loading"
+    id="loading">
+
+    🤖 Code Mentor is analyzing your code...
+
+</div>
+
+
+<!-- =========================================================
+     RESULTS
+     ========================================================= -->
+
+<section
+    class="results"
+    id="results">
+</section>
+
+
+<!-- =========================================================
+     LEARNING JOURNEY
+     ========================================================= -->
+
+<section class="learning">
+
+    <h2>
+        Your <span>Coding Journey</span> 🚀
+    </h2>
+
+
+    <div class="cards">
+
+
+        <div class="learning-card">
+
+            <div class="icon">
+                📚
+            </div>
+
+            <h3>
+                Learn
+            </h3>
+
+            <p>
+                Understand Python concepts with simple
+                explanations and examples.
+            </p>
+
+        </div>
+
+
+        <div class="learning-card">
+
+            <div class="icon">
+                💻
+            </div>
+
+            <h3>
+                Practice
+            </h3>
+
+            <p>
+                Write code, find mistakes and improve
+                your programming skills.
+            </p>
+
+        </div>
+
+
+        <div class="learning-card">
+
+            <div class="icon">
+                🚀
+            </div>
+
+            <h3>
+                Improve
+            </h3>
+
+            <p>
+                Get mentor feedback and become a
+                better programmer step by step.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<footer>
+
+    🤖 Code Mentor • Your Friendly Python Learning Assistant
+
+</footer>
+
+
+<script>
+
+/* =========================================================
+   ANALYZE CODE
+   ========================================================= */
+
+async function analyzeCode() {
+
+    const code =
+        document.getElementById("codeInput").value;
+
+    const loading =
+        document.getElementById("loading");
+
+    const results =
+        document.getElementById("results");
+
+
+    if (!code.trim()) {
+
+        alert(
+            "Please enter some Python code first."
+        );
+
+        return;
+    }
+
+
+    loading.style.display = "block";
+
+    results.innerHTML = "";
+
+
+    try {
+
+        const response = await fetch(
+            "/analyze",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    code: code
+                })
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        loading.style.display = "none";
+
+
+        if (!response.ok) {
+
+            showSingleMessage(
+                "⚠️ Error",
+                data.error ||
+                "Something went wrong."
+            );
+
+            return;
+        }
+
+
+        if (data.result !== undefined) {
+
+            displayResults(data.result);
+
+        }
+
+        else if (data.message) {
+
+            showSingleMessage(
+                "🤖 Code Mentor",
+                data.message
+            );
+
+        }
+
+        else {
+
+            showSingleMessage(
+                "⚠️ Result",
+                JSON.stringify(
+                    data,
+                    null,
+                    2
+                )
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        loading.style.display = "none";
+
+        showSingleMessage(
+            "❌ Connection Error",
+            "Could not connect to Code Mentor backend.\n\nMake sure Flask server is running."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DISPLAY RESULTS
+   ========================================================= */
+
+function displayResults(result) {
+
+    const results =
+        document.getElementById("results");
+
+    const text =
+        String(result);
+
+
+    const sections = [
+
+        {
+            title: "🔍 Syntax Check",
+            heading: "SYNTAX CHECK"
+        },
+
+        {
+            title: "📖 Code Explanation",
+            heading: "CODE EXPLANATION"
+        },
+
+        {
+            title: "✨ Code Quality",
+            heading: "CODE QUALITY"
+        },
+
+        {
+            title: "🛠 Smart Fix",
+            heading: "SMART FIX"
+        },
+
+        {
+            title: "⚡ Complexity",
+            heading: "COMPLEXITY ANALYSIS"
+        },
+
+        {
+            title: "📤 Output",
+            heading: "PROGRAM OUTPUT"
+        },
+
+        {
+            title: "🤖 Mentor Feedback",
+            heading: "MENTOR FEEDBACK"
+        }
+
+    ];
+
+
+    const headingPositions = [];
+
+
+    sections.forEach(section => {
+
+        const position =
+            findBackendHeading(
+                text,
+                section.heading
+            );
+
+
+        if (position !== -1) {
+
+            headingPositions.push({
+
+                heading: section.heading,
+
+                position: position
+
+            });
+
+        }
+
+    });
+
+
+    headingPositions.sort(
+        (a, b) =>
+            a.position - b.position
+    );
+
+
+    const contentMap = {};
+
+
+    sections.forEach(section => {
+
+        const current =
+            headingPositions.find(
+                item =>
+                    item.heading ===
+                    section.heading
+            );
+
+
+        if (!current) {
+
+            contentMap[
+                section.heading
+            ] = "No information available.";
+
+            return;
+
+        }
+
+
+        const start =
+            current.position +
+            getFullHeadingLength(
+                text,
+                current.position
+            );
+
+
+        let end =
+            text.length;
+
+
+        for (
+            let i = 0;
+            i < headingPositions.length;
+            i++
+        ) {
+
+            if (
+                headingPositions[i].position >
+                current.position
+            ) {
+
+                end =
+                    headingPositions[i].position;
+
+                break;
+
+            }
+
+        }
+
+
+        let content =
+            text.substring(
+                start,
+                end
+            );
+
+
+        content =
+            cleanBackendContent(
+                content
+            );
+
+
+        contentMap[
+            section.heading
+        ] =
+            content ||
+            "No information available.";
+
+    });
+
+
+    if (
+        contentMap["MENTOR FEEDBACK"]
+    ) {
+
+        contentMap["MENTOR FEEDBACK"] =
+            contentMap["MENTOR FEEDBACK"]
+                .replace(
+                    /==========\s*ANALYSIS COMPLETED\s*==========/gi,
+                    ""
+                )
+                .replace(
+                    /ANALYSIS COMPLETED/gi,
+                    ""
+                )
+                .trim();
+
+    }
+
+
+    let html = "";
+
+
+    sections.forEach(section => {
+
+        let content =
+            contentMap[
+                section.heading
+            ];
+
+
+        if (
+            !content ||
+            !content.trim()
+        ) {
+
+            content =
+                "No information available.";
+
+        }
+
+
+        if (
+            section.heading ===
+            "PROGRAM OUTPUT"
+        ) {
+
+            html += `
+
+                <div class="result-card output-card">
+
+                    <h3>
+                        ${section.title}
+                    </h3>
+
+                    <div class="output-content">${escapeHTML(
+                        content
+                    )}</div>
+
+                </div>
+
+            `;
+
+        }
+
+        else {
+
+            html += `
+
+                <div class="result-card">
+
+                    <h3>
+                        ${section.title}
+                    </h3>
+
+                    <pre>${escapeHTML(
+                        content
+                    )}</pre>
+
+                </div>
+
+            `;
+
+        }
+
+    });
+
+
+    results.innerHTML =
+        html;
+
+
+    requestAnimationFrame(() => {
+
+        setTimeout(() => {
+
+            results.scrollIntoView({
+
+                behavior: "smooth",
+
+                block: "start"
+
+            });
+
+        }, 120);
+
+    });
+
+}
+
+
+/* =========================================================
+   FIND BACKEND HEADING
+   ========================================================= */
+
+function findBackendHeading(
+    text,
+    heading
+) {
+
+    const escaped =
+        heading.replace(
+            /[.*+?^${}()|[\]\\]/g,
+            "\\$&"
+        );
+
+
+    const regex =
+        new RegExp(
+            "^\\s*=+\\s*" +
+            escaped +
+            "\\s*=+\\s*$",
+            "im"
+        );
+
+
+    const match =
+        regex.exec(text);
+
+
+    if (!match) {
+
+        return -1;
+
+    }
+
+
+    return match.index;
+
+}
+
+
+/* =========================================================
+   GET HEADING LENGTH
+   ========================================================= */
+
+function getFullHeadingLength(
+    text,
+    position
+) {
+
+    const newline =
+        text.indexOf(
+            "\n",
+            position
+        );
+
+
+    if (newline === -1) {
+
+        return (
+            text.length -
+            position
+        );
+
+    }
+
+
+    return (
+        newline +
+        1 -
+        position
+    );
+
+}
+
+
+/* =========================================================
+   CLEAN BACKEND CONTENT
+   ========================================================= */
+
+function cleanBackendContent(
+    content
+) {
+
+    return content
+
+        .replace(
+            /^\s*=+\s*$/gm,
+            ""
+        )
+
+        .replace(
+            /^\s*ANALYSIS COMPLETED\s*$/gim,
+            ""
+        )
+
+        .replace(
+            /\n{3,}/g,
+            "\n\n"
+        )
+
+        .trim();
+
+}
+
+
+/* =========================================================
+   SINGLE MESSAGE
+   ========================================================= */
+
+function showSingleMessage(
+    title,
+    message
+) {
+
+    const results =
+        document.getElementById("results");
+
+
+    results.innerHTML = `
+
+        <div class="result-card">
+
+            <h3>
+                ${escapeHTML(title)}
+            </h3>
+
+            <pre>${escapeHTML(message)}</pre>
+
+        </div>
+
+    `;
+
+
+    scrollToResults();
+
+}
+
+
+/* =========================================================
+   AUTO SCROLL
+   ========================================================= */
+
+function scrollToResults() {
+
+    const results =
+        document.getElementById("results");
+
+
+    setTimeout(() => {
+
+        results.scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "start"
+
+        });
+
+    }, 150);
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function escapeHTML(text) {
+
+    return String(text)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   CLEAR
+   ========================================================= */
+
+function clearCode() {
+
+    document
+        .getElementById("codeInput")
+        .value = "";
+
+
+    document
+        .getElementById("results")
+        .innerHTML = "";
+
+
+    document
+        .getElementById("loading")
+        .style.display = "none";
+
+
+    document
+        .getElementById("codeInput")
+        .scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "center"
+
+        });
+
+}
+
+</script>
+
+</body>
+</html>
